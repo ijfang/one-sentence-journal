@@ -8,5 +8,20 @@
 import SwiftUI
 
 struct ListView: View {
-    var body: some View {}
+    @Environment(\.managedObjectContext) var moc
+    @FetchRequest(sortDescriptors: []) var entries: FetchedResults<Entry>
+    
+    var body: some View {
+        VStack{
+            List(entries) { entry in
+                Text(entry.text ?? "Unknown")
+                
+            }
+            Text("Count: \(entries.count)")
+        }
+    }
+}
+
+#Preview {
+    ListView()
 }

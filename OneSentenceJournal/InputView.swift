@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct InputView: View {
     @State var text = ""
+    @Environment(\.managedObjectContext) private var moc
+    @FetchRequest(sortDescriptors: []) var entries: FetchedResults<Entry>
+    
     let characterLimit = 100
     
     var body: some View {
@@ -49,6 +53,7 @@ struct InputView: View {
                 .foregroundColor(Color(hex: "#ED8AA0"))
                      
             )
+            .multilineTextAlignment(.center)
             .padding(.top, 20)
             .onChange(of: text){
                 if text.count > characterLimit {
@@ -71,7 +76,15 @@ struct InputView: View {
             
            
             
-            Button("Save"){}
+            Button("Save"){
+                let entry = Entry(context: moc)
+                
+                entry.id = UUID()
+                entry.date = Date()
+                entry.text = String(text)
+                entry.characterCount = Int16(text.count)
+                try? moc.save()
+            }
                 .frame(width: 175, height: 50)
                 .font(.system(size: 20, design: .rounded))
                 .fontWeight(.bold)
@@ -81,14 +94,22 @@ struct InputView: View {
                     .foregroundColor(Color(hex: "F5903B"))
                 )
                 .foregroundStyle(Color(hex: "FFE8D5"))
+                .onSubmit {
+                  
+//                    persistenceController.save()
+                }
             
-            
+            List(entries) { entry in
+                Text(entry.text ?? "Unknown")
+                Text("ok dokey")
+                
+            }
+            Text("Count: \(entries.count)")
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(hex: "#FFE8D5"))
         
-       
         
     }
 }
