@@ -10,6 +10,7 @@ import CoreData
 
 struct InputView: View {
     @State var text = ""
+    @State var submittedEntry = false
     @Environment(\.managedObjectContext) private var moc
     @FetchRequest(sortDescriptors: []) var entries: FetchedResults<Entry>
     
@@ -62,10 +63,6 @@ struct InputView: View {
                 }
             }
             
-            //            .onSubmit {
-            //                    validate(name: username)
-            //                }
-            
             HStack{
                 Spacer()
                 
@@ -77,13 +74,12 @@ struct InputView: View {
            
             
             Button("Save"){
+                submittedEntry = true
                 let entry = Entry(context: moc)
-                
                 entry.id = UUID()
                 entry.date = Date()
-                entry.text = String(text)
+                entry.text = String(text.trimmingCharacters(in: .whitespaces))
                 entry.characterCount = Int16(text.count)
-                try? moc.save()
             }
                 .frame(width: 175, height: 50)
                 .font(.system(size: 20, design: .rounded))
@@ -95,16 +91,13 @@ struct InputView: View {
                 )
                 .foregroundStyle(Color(hex: "FFE8D5"))
                 .onSubmit {
-                  
-//                    persistenceController.save()
+                    try? moc.save()
                 }
-            
-            List(entries) { entry in
-                Text(entry.text ?? "Unknown")
-                Text("ok dokey")
-                
-            }
-            Text("Count: \(entries.count)")
+                .alert("Your entry has been successfully added", isPresented: $submittedEntry){
+                    Button("OK", role: .cancel) {}
+                }
+            // need to figure out how to center the alert text
+                .multilineTextAlignment(.center)
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

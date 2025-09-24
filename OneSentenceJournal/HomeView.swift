@@ -24,7 +24,17 @@ struct HomeView: View {
                         showNewEntry = true
                         
                     }.fullScreenCover(isPresented: $showNewEntry){
-                        InputView()
+                            TabView{
+                                InputView()
+                                    .tabItem {
+                                        Label("New Entry", systemImage: "book.pages.fill")
+                                    }
+                                
+                                ListView()
+                                    .tabItem {
+                                        Label("Previous Entries", systemImage: "list.bullet")
+                                }
+                        }
                     }
                         .frame(width: 175, height: 50)
                         .font(.system(size: 20, design: .rounded))
