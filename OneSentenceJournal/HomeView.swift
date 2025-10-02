@@ -9,9 +9,16 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var showNewEntry = false
+    let image = Image("Hedgehog")
+    
     var body: some View {
         NavigationStack{
             VStack {
+                Image("Hedgehog")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 200)
+                    
                 Text("One-Sentence Journal")
                     .multilineTextAlignment(.center)
                     .font(.system(size: 42))
