@@ -16,7 +16,7 @@ func dateAsString(date: Date) -> String{
 
 struct ListView: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(sortDescriptors:[NSSortDescriptor(keyPath: \Entry.date, ascending: true)])
+    @FetchRequest(sortDescriptors:[NSSortDescriptor(keyPath: \Entry.date, ascending: false)])
     var entries: FetchedResults<Entry>
     
     var body: some View {
@@ -25,13 +25,7 @@ struct ListView: View {
                 ZStack{
                     RoundedRectangle(cornerRadius: 50)
                         .fill(Color(hex: "#F9C6D2"))
-                        .strokeBorder()
-                    
-                        
-//                        .overlay(RoundedRectangle(cornerRadius: 50)
-//                            .stroke(lineWidth: 10)
-//                            .foregroundColor(Color(hex: "F5903B"))
-                    
+                        .stroke(Color(hex: "#ED8AA0"), lineWidth: 10)
                     
                     VStack{
                         Text("\(dateAsString(date: entry.date!))")
@@ -39,22 +33,14 @@ struct ListView: View {
                             .fontWeight(.bold)
                             .padding(.top)
                         
-//                            .overlay(RoundedRectangle(cornerRadius: 50)
-//                                .stroke(lineWidth: 10)
-//                                .foregroundColor(Color(hex: "F5903B"))
-                        
                         Text( "\(entry.text ?? "Unknown")")
                             .foregroundColor(Color(hex: "#5A3E36"))
                             .fontWeight(.regular)
                             .listRowBackground(Color(hex: "#FFE8D5"))
                             .padding(.bottom)
-                        
                     }
-                    
-                    
                 }
                 .listRowBackground(Color.clear)
-                
                 
             }
             .scrollContentBackground(.hidden)
@@ -70,7 +56,6 @@ struct ListView: View {
         .background(Color(hex: "#FFE8D5"))
     }
 }
-
 
 #Preview {
     ListView()
